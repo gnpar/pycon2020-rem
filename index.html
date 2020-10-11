@@ -17,21 +17,62 @@
     <div class="reveal">
       <div class="slides">
         <section>
-          <h1>Lambda Sistemas</h1>
-          <ul>
-            <li>Fierro</li>
-            <li>Radiocut</li>
-          </ul>
-
+          <h1>Rompiendo el monolito</h1>
+          <blockquote style="width:95%">
+            “Reflexiones y experiencias en la transición desde una arquitectura <strong>monolítica</strong> a una de <strong>microservicios</strong>
+          </blockquote>
           <p>
-            <small>Inicio de actividades: 2006</small>
+            <small>Por <a href="http://twitter.com/gnarvaja">@gnarvaja</a> de <a href="https://radiocut.fm">http://radiocut.fm</a> y </small>
+            <small>Gabriel Parrondo de <a href="https://www.fierro.com.ar">https://www.fierro.com.ar</a></small>
+          </p>
+          <p>
+            <a href="https://www.fierro.com.ar">
+              <img width="96" height="96" data-src="fierro-2018-blanco-cuadrado.png" style="border: 0; background: transparent" alt="Fierro">
+            </a>
+            <a href="https://radiocut.fm">
+              <img width="96" height="96" data-src="radio_cut_96.png" style="border: 0; background: transparent" alt="RadioCut">
+            </a>
           </p>
         </section>
         <section>
-          <h2>Desventajas del monolito</h2>
+          <h2>Lambda Sistemas</h2>
+          <img height="344px" src="LambdaSistemas.png" alt="Lambda Inicio Actividades">
         </section>
         <section>
-          <h2>Ventajas de microservicios</h2>
+          <h2>Dos productos</h2>
+          <ul>
+            <li class="fragment">2004: Fierro - Sistema de Gestión para Librerías y Editoriales</li>
+            <li class="fragment">2013: RadioCut - Plataforma para escuchar radio on-demand y viralizar segmentos</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Deuda Técnica</h2>
+          <img height="470px" src="deuda.png" alt="Deuda Técnica" class="fragment">
+        </section>
+        <section>
+          <h2>Arquitectura Monolítica</h2>
+          <ul>
+            <li class="fragment">Único (o pocos) "componentes" de software</li>
+            <li class="fragment">Un mismo lenguage, misma base de datos</li>
+            <li class="fragment">Muchas decisiones atraviesan TODO el código</li>
+            <li class="fragment">Tests larguísimos</li>
+            <li class="fragment">Alto riesgo de cambios estructurales</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Microservicios</h2>
+          <blockquote cite="Martin Fowler" style="width:95%">
+            “the microservice architectural style is an approach to developing a <strong>single application</strong> as a suite of <strong>small</strong> services, each running in its <strong>own process</strong> and communicating with lightweight mechanisms, often an HTTP resource API" - Martin Fowler
+          </blockquote>
+        </section>
+        <section>
+          <h2>Microservicios</h2>
+          <ul>
+            <li class="fragment">Alta cohesión y Bajo Acoplamiento llevados al siguiente nivel</li>
+            <li class="fragment">Distintas <i>decisiones</i> en cada microservicio</li>
+            <li class="fragment">Tamaño <i>manejable</i></li>
+            <li class="fragment">DevOps required!</li>
+          </ul>
         </section>
       </div>
     </div>
