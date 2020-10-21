@@ -90,16 +90,12 @@
         </section>
         <section>
           <h2>Fierro</h2>
-          <img src="Fierro3Capas.png" alt="Fierro: 3 capas"> <!-- TODO 
-            Postgresql -> fierroserver -> fierroclient 
-          -->
+          <img src="Fierro3Capas.png" alt="Fierro: 3 capas">
         </section>
         <section>
-          <h2>Primer microservicio: Integración con Tiendanube</h2>
-          <p>Middleware sencillo: toma información de catálogo y stock de Fierro y lo mantiene sincronizado en un tercero</p>
-          <img src="TiendaNube.png" alt="Servicio de TiendaNube"> <!-- TODO 
-            Fierro <-> Tiendanube
-          -->
+          <h2>Primer microservicio: marketplace-gateway</h2>
+          <p>Middleware sencillo: toma información de catálogo y stock de Fierro y lo mantiene sincronizado con una tienda online</p>
+          <img src="FierroMarketplaces.png" alt="Servicio de marketplace-gateway">
         </section>
         <section>
           <h2>Un cambio que vale la pena</h2>
@@ -130,17 +126,31 @@
         </section>
         <section>
           <h2>Cómo nos imaginamos este futuro</h2>
-          <img height="344px" src="FierroMicroservicios.jpg" alt="Fierro como microservicios"> <!-- TODO 
-            
-                  Fierroclient
-                       |
-                  Fierroserver
-                  /    |     \
-                 /     |      \
-                /      |       \
-           Catálogo    |        RR.HH.
-                   Contabilidad
-          -->
+          <img height="344px" src="FierroMicroservicios.png" alt="Fierro como microservicios">
+        </section>
+        <section>
+          <h2>Algunas conclusiones</h2>
+          <ul>
+            <li class="fragment">La comunicación es difícil</li>
+            <li class="fragment">Desarrollar bibliotecas para problemas comunes
+              <ul>
+                <li><a href="https://pypi.org/project/redis-tools/">redis-tools</a></li>
+                <li><a href="https://pypi.org/project/event-isc/">event-isc</a></li>
+              </ul>
+            </li>
+            <li class="fragment">Desarrollar bibliotecas para los usuarios del servicio</li>
+            <li class="fragment">Docker</li>
+            <li class="fragment">Kubernetes</li>
+            <li class="fragment">Monitoreo</li>
+          </ul>
+        </section>
+        <section>
+          <h2>¿Estamos migrando de un problema a otro?</h2>
+          <ul>
+            <li class="fragment">Problemas de integración</li>
+            <li class="fragment">Problemas de performance</li>
+          </ul>
+          <p class="fragment">Tenemos muchas dudas, pero hasta ahora los resultados están siendo muy positivos</p>
         </section>
       </div>
     </div>
