@@ -182,16 +182,34 @@
         </section>
         <section>
           <h2>RadioCut</h2>
-          <img height="500px" src="ArquitecturaRadioCut.png" alt="ArquitecturaRadioCut">
+          <img height="500px" class="fragment" src="ArquitecturaRadioCut.png" alt="ArquitecturaRadioCut">
+          <aside class="notes">
+            Esta es más o menos la arquitectura de RadioCut. Se puede separar en dos, por un lado los componentes relacionados con la grabación de las radios. Y por otro lado el sitio web que también es backend de la app, que es el que gestiona toda la metadata de las radios y los recortes, en fin toda la funcionalidad de la aplicación.
+            La parte de grabación casi desde el principio fue pensada con microservicios, eso de hecho nos permitió ir evolucionando estos microservicios en forma paulatina, e incluso reescribirlos totalmente sin que ello suponga interrupción del servicio o un gran riesgo. Lo que empezó como algunos scripts en Python 2 deployados medio manualmente o con scripts de bash, hoy son contenedores Docker, en Python 3 orquestados por Kubernetes e incluso algunos de estos contenedores manejados por un operador Kubernetes hecho en Python con la librería KOPF.
+            Con la parte de Django es otra historia. Ahí tenemos en un solo componente prácticamente toda la lógica de la aplicación, que se compone de la base de radios, programas, recortes, etc. La base de usuarios y el manejo de sus suscripciones, pagos, etc. Las distintas modalidades de login, notificaciones, un sistema de publicidad propio (recortes patrocinados), un generador de sitios para programas de radio, que fue un fracaso comercial, en fin, algo que se ve más o menos así...
+          </aside>
+        </section>
+        <section>
+          <h2>Componente Django</h2>
+          <img height="500px" src="monolito.png" alt="Monolito">
+          <aside class="notes">
+            O al menos así se me aparece en pesadillas, hago "git push" y me empieza a perseguir este monstruo.
+            Así que empezamos a cortarle pedazos.
+          </aside>
         </section>
         <section>
           <h2>Microservicio - Headliner</h2>
           <ul>
             <li class="fragment">Videos de recortes</li>
             <li class="fragment">MP3 de Recortes</li>
-            <li class="fragment">Task Oriented - Event Based</li>
             <li class="fragment">Saca dependencias del componente Django</li>
+            <li class="fragment">Task Oriented - Event Based</li>
           </ul>
+          <aside class="notes">
+            Este es un microservicio que surgió de un nuevo feature, generar videos de los recortes, con distintos temas, y con gráficos de la onda. Luego migramos ahí el código que generaba descargas unificadas de recortes, en un único MP3. Esto nos permitió también sacar dependencias como FFMPEG del componente de Django.
+            La integración entre los servicios, en lugar de hacerla de forma imperativa sincrónica con llamadas HTTP, la implementamos en forma de eventos, creando tareas en colas de celery.
+            Para esto hicimos una librería, compatible con Python 2 y 3, que abstrae el dispatch de eventos entre los servicios.
+          </aside>
         </section>
         <section>
           <h2>Integración por eventos</h2>
@@ -203,6 +221,9 @@ eventisc.trigger("download_pending", {"download": mp3_download})
     {"status": "ready", "storage_data": {...}, "download_id": download_id}
 )
 </code></pre>
+          <aside class="notes">
+            Así es más o menos cómo se ve en el código de uno y otro servicio la integración. Esto era algo que ya desde el lado del usuario era asíncrono, y que antes manejábamos con tareas celery del mismo servicio. Pero en general este tipo de integración, por eventos, está buena para muchos casos donde no nos interesa la respuesta del otro servicio o esa respuesta es asíncrona.
+          </aside>
         </section>
         <section>
           <h2>Event-ISC</h2>
@@ -223,6 +244,10 @@ listeners:
    send_task_kargs:
      serializer: json
 </code></pre>
+          <aside class="notes">
+            Esta librería que hicimos es muy simple y bastante limitada por ahora. Se llama event-isc por Inter Service Communication (en contraposición a IPC, inter process communication que es la comunicación entre procesos pero habitualmente procesos del mismo tipo). La idea es que desde el código simplemente tiramos eventos y luego desde la configuración atamos eventos a sus efectos que puede ser encolar tareas en colas celery, o también soporta hacer llamadas HTTP.
+            La configuración nos permite hacer un mapping simple entre los parámetros del evento y los parámetros de la tarea o la llamada HTTP.
+          </aside>
         </section>
         <section>
           <h2>Conectados por configuración</h2>
@@ -236,6 +261,9 @@ listeners:
    send_task_kargs:
      serializer: json
 </code></pre>
+          <aside class="notes">
+            Esta es la configuración del evento de vuelta, cuando en este caso el download está listo. En Django el download se modifica y eventualmente le ofrecerá al usuario el link al archivo.
+          </aside>
         </section>
         <section>
           <h2>Futuro de RadioCut</h2>
@@ -244,6 +272,11 @@ listeners:
             <li class="fragment">Actividad / Estadísticas</li>
             <li class="fragment">Nueva app / Front-end web</li>
           </ul>
+          <aside class="notes">
+            Para adelante, estamos pensando en extraer a micros servicios otras responsabilidades. Una posibilidad podría ser todo lo relacionado con la base de usuarios, las suscripciones y pagos y todas las notificaciones. Este es un conjunto de responsabilidades que podría estar en un nuevo servicio que incluso tal vez nos pueda servir para reutilizar en otros productos.
+            También tenemos por delante el requerimiento de llevar mayor registro de la actividad de los usuarios y ofrecer a las radios mejores estadísticas de escucha, y esto es candidato a ser un nuevo servicio, llevándose lo poco que hoy tenemos relacionado a eso.
+            Y bueno, también tenemos en nuestra wish list una nueva versión de la app y del front-end web. Este cambio también nos podría servir para ir raleando el componente Django, sacándole toda la capa HTML.
+          </aside>
         </section>
         <section>
           <h2>Algunas conclusiones</h2>
@@ -286,6 +319,7 @@ listeners:
         // Learn about plugins: https://revealjs.com/plugins/
         plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
       });
+      Reveal.configure({ showNotes: 'separate-page' });
     </script>
   </body>
 </html>
